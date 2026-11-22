@@ -1,8 +1,8 @@
 import random
-from copy import copy
+from copy import deepcopy
 
 class state:
-    def __init__(self, N = 5):
+    def __init__(self, N = 20):
         self.N = N
         self.S = [[0 for _ in range(N + 2)] for _ in range(N + 2)]
     
@@ -40,22 +40,47 @@ class state:
 
     def __repr__(self):
         str = f">\n"
-        for i in range(self.N):
-            for j in range(self.N):
+        for i in range(1, self.N + 1):
+            for j in range(1, self.N + 1):
                 str += "█" if self.S[i][j] == 1 else " "
             str += "\n"
         return str + "<"
 
-s0 = state()
+s0 = state(30)
 s0.random()
-
-for i in range(10):
-    for j in range(100000):
-        s = copy(s0)
+energyOverTime = []
+minEnergy =  9999999
+maxEnergy = -9999999
+for i in range(5):
+    for j in range(10):
+        s = deepcopy(s0)
         s.mutate()
         
-        if s.energy() < s0.energy():
-            s0 = copy(s)
+        energy = s0.energy()
 
+        if s.energy() < energy:
+            s0 = s
+
+        
+        energyOverTime.append(energy)
+        if maxEnergy < energy:
+            maxEnergy = energy
+        elif minEnergy > energy:
+            minEnergy = energy
     print(s0)
 
+print(energyOverTime)
+height = 20
+width = len(energyOverTime)
+dots = [round((b - minEnergy) / (maxEnergy - minEnergy)*height) for a, b in enumerate(energyOverTime)]
+print(dots)
+str = ""
+for l in range(height):
+    for c in range(width):
+        if dots[c] == height - l:
+            str += "█"
+        else:
+            str += " "
+    str += "\n"
+
+print(str)
