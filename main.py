@@ -1,48 +1,23 @@
-from copy import deepcopy
+from display import display_plotext
 from material import material
 
-s0 = material(40)
-s0.random()
-energyOverTime = []
-minEnergy =  9999999
-maxEnergy = -9999999
-for i in range(4):
-    for j in range(1000):
-        s = deepcopy(s0)
-        s.mutate()
-        
-        energy = s0.energy()
+class experience:
+    def __init__(self, N, B, T):
+        self.material = material(N, B, T)
+        self.material.set_all(spin = 1)
+        self.energyOverTime = []
 
-        if s.energy() < energy:
-            s0 = s
+    def step(self, n):
+        for i in range(n):
+            self.material.mutate()
+            self.energyOverTime.append(self.material.energy)
 
-        
-        energyOverTime.append(energy)
-        if maxEnergy < energy:
-            maxEnergy = energy
-        elif minEnergy > energy:
-            minEnergy = energy
-    print(s0)
+ex = experience(100, 0, 5)
 
+for i in range(1000):
+    ex.step(1000)
+    display = display_plotext(width=None, height=12)
+    display.plot_material(ex.material, marker="braille")
 
-height = 20
-width = 100
-dots = [(round(a / len(energyOverTime) * width), round((b - minEnergy) / (maxEnergy - minEnergy)*height)) for a, b in enumerate(energyOverTime)]
-
-graph = str(maxEnergy) + "\n"
-for l in range(height):
-    for c in range(width):
-        f = False
-        for i in range(len(dots)):
-            if dots[i] == (c, height - l):
-                graph += "█"
-                f = True
-                break
-        if not f:
-            graph += " "
-    graph += "\n"
-
-xLabel = str(minEnergy) + "/0"
-xLabel += " " * (width - len(xLabel) - len(str(len(energyOverTime)))) + str(len(energyOverTime))
-graph += xLabel
-print(graph)
+display = display_plotext(width=120, height=24)
+display.plot_dashboard(ex.material, ex.energyOverTime)
