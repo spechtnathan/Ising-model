@@ -21,6 +21,14 @@ class display_plotext:
         plt.ylabel("Energy")
         plt.show()
 
+    def plot_magnetization(self, magnetization_over_time, title="Magnetization over time", marker="braille"):
+        self._apply_base_style()
+        plt.plot(magnetization_over_time, marker=marker)
+        plt.title(title)
+        plt.xlabel("Step")
+        plt.ylabel("Magnetization")
+        plt.show()
+
     def _plot_lattice(self, mat, title, marker):
         xs, ys = [], []
         for r in range(1, mat.N + 1):

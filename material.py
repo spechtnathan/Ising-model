@@ -2,10 +2,10 @@ import random
 from math import exp
 
 class material:
-    def __init__(self, N = 20, B = 1, T = 1):
+    def __init__(self, N = 20, J = 1, B = 1, T = 1):
         self.N = N
         self.S = [[0 for _ in range(N + 2)] for _ in range(N + 2)]
-        self.J = 1
+        self.J = J
         self.B = B
         self.T = T
         self.__spin_sum = 0
