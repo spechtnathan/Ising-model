@@ -1,41 +1,25 @@
-from display import display_plotext
-from material import material
+import numpy as np
 
-class experience:
-    def __init__(self, N, J, B, T):
-        self.material = material(N, J, B, T)
-        self.material.set_all(spin = 1)
-        self.energyOverTime = []
-        self.magnetizationOverTime = []
+class lattice:
+    def __init__(self, N, J, B, T, S0):
+        self.N = N
+        self.J = J
+        self.B = B
+        self.T = T
 
-    def step(self, n):
-        for i in range(n):
-            self.material.mutate()
-            self.energyOverTime.append(self.material.energy)
-            self.magnetizationOverTime.append(self.material.magnetization)
+        self.grid = np.ones((N, N)) * S0
 
-#ex = experience(100, -3, 0)
-#
-#for i in range(1000):
-#    ex.step(1000)
-#    display = display_plotext(width=None, height=12)
-#    display.plot_material(ex.material, marker="braille")
-#
-#display = display_plotext(width=120, height=24)
-#display.plot_dashboard(ex.material, ex.energyOverTime)
+        # TODO watch for values of S0
 
-J = int(input("J : "))
-B = int(input("B : "))
-T = int(input("T : "))
+    def compute_energy(self):
+        Energy = - self.J * np.sum(self.grid * (np.roll(self.grid, -1, axis=0) + np.roll(self.grid, -1, axis=1)))
+        Energy += - self.B * np.sum(self.grid)
+        return Energy
 
-ex = experience(100, J, B, T)
+    def compute_magnetization(self):
+        Magnetization = np.sum(self.grid)
+        return Magnetization
 
-display = display_plotext(width=120, height=24)
+s = lattice(5, 1,1,1, -1)
 
-for i in range(10):
-    ex.step(10000)
-    display = display_plotext(width=None, height=12)
-    display.plot_material(ex.material, marker="braille")
-
-display.plot_energy(ex.energyOverTime)
-display.plot_magnetization(ex.magnetizationOverTime)
+print(s.grid)
