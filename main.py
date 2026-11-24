@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Spin lattice of a material
 class lattice:
@@ -67,7 +68,7 @@ class lattice:
         dE -= self.B * self.grid[row][column] * 2
 
         # accept or reject regarding the energy change
-        if dE > 0 or self.rng.random() < np.exp(-dE / self.T):
+        if dE < 0 or self.rng.random() < np.exp(-dE / self.T):
             self.energy += dE
         else:
             self.grid[row][column] *= -1 # change back the spin if rejected
@@ -84,8 +85,13 @@ class simulation(lattice):
             self.energyOverTime.append(self.energy)
 
 
-s = simulation(4, 1, 1, 1, -1)
+s = simulation(N=200, J=1, B=1, T=73, S0=-1)
 print(s.grid)
-s.step(5)
+s.step(50000)
 print(s.energyOverTime)
-print(s.grid)
+
+
+print(s.energyOverTime)
+
+plt.plot(np.arange(len(s.energyOverTime)), s.energyOverTime)
+plt.show()
