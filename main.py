@@ -45,6 +45,10 @@ class lattice:
 
         # Compute Energy difference
         # dE = - 2 * J * (s1 + s2 + s3 + s4) - 2 * B * s0 with s0 the spin changed and s1 to s4 neirest neighbors
+        # Times 2 to cancel previous energy
+        #    1                     1
+        #  1 1 1 E = 4J + 5B   1 -1 1 E = -4J + 3B ; dE = -8J -2B 
+        #    1                     1
         dE = - self.J * 2 * (self.grid[pos[0]-1][pos[1]] + self.grid[pos[0]+1][pos[1]] + self.S[pos[0]][pos[1]-1] + self.S[pos[0]][pos[1]+1]) * self.S[pos[0]][pos[1]]
         dE -= self.B * self.S[pos[0]][pos[1]] * 2
 
