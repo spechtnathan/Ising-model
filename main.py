@@ -18,7 +18,12 @@ class lattice:
         if S0 not in [-1,0,1]:
             pass
 
-        self.grid = np.ones((N, N)) * S0
+        self.grid = np.ones((N + 2, N + 2)) * S0
+        # Defined border conditions, no interaction between opposite sides
+        self.grid[0, :] = 0
+        self.grid[-1, :] = 0
+        self.grid[:, 0] = 0
+        self.grid[:, -1] = 0
 
         self.compute_energy()
 
@@ -48,8 +53,8 @@ class lattice:
 
     def step(self):
         # change one random spin
-        row = self.rng.integers(0, self.N)
-        column = self.rng.integers(0, self.N)
+        row = self.rng.integers(1, self.N + 1)
+        column = self.rng.integers(1, self.N + 1)
         self.grid[row][column] *= -1 
 
         # Compute Energy difference
@@ -63,10 +68,9 @@ class lattice:
 
         # accept or reject regarding the energy change
         if dE > 0 or self.rng.random() < np.exp(-dE / self.T):
-            self.grid[row][column] *= -1 # change back the spin if rejected
             self.energy += dE
         else:
-            pass # do nothing if accepted
+            self.grid[row][column] *= -1 # change back the spin if rejected
 
 
 class simulation(lattice):
