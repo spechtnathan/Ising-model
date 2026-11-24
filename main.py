@@ -76,13 +76,16 @@ class lattice:
 class simulation(lattice):
     def __init__(self, N, J, B, T, S0):
         super().__init__(N, J, B, T, S0)
+        self.energyOverTime = [self.energy]
 
     def step(self, n):
         for i in range(n):
             super().step()
+            self.energyOverTime.append(self.energy)
 
 
 s = simulation(4, 1, 1, 1, -1)
 print(s.grid)
-s.step(1)
+s.step(5)
+print(s.energyOverTime)
 print(s.grid)
