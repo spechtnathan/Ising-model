@@ -34,7 +34,22 @@ class lattice:
         """
         Magnetization = np.sum(self.grid)
         return Magnetization
-#hello world 
-s = lattice(5, 1,1,1, -1)
 
+    def step():
+        # change one random spin
+        # accept or reject regarding the energy change
+        pass
+
+
+class simulation(lattice):
+    def __init__(self, N, J, B, T, S0):
+        super().__init__(N, J, B, T, S0)
+
+    def step(n):
+        for i in range(n):
+            super().step()
+
+
+s = simulation(5, 1, 1, 1, -1)
+s.step(5000)
 print(s.grid)
