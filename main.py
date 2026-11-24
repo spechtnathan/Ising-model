@@ -19,7 +19,7 @@ class lattice:
     def compute_magnetization(self):
         Magnetization = np.sum(self.grid)
         return Magnetization
-
+#hello world 
 s = lattice(5, 1,1,1, -1)
 
 print(s.grid)
